@@ -26,31 +26,24 @@ public class Task {
         return this.subTasks;
     }
 
-    // public String toString () {
-    //     String out = "";
-        
-    //     if (subTasks.size() != 0) {
-    //         for (Task t : subTasks) {
-                
-    //             out+= t.getDesc() + "\n";
-    //             out+= t.toString(1);
-    //         }
-    //     }
-    //     return out;
-    // }
+
+
+    public String toString () {
+        return toString(0);    }
 
     public String toString (int level) {
         String out = "";
-        
+        for (int i = 0; i < level; i++) {
+            out += "\t";
+        }
+        out += desc + "\n";
+
         if (subTasks.size() != 0) {
             for (Task t : subTasks) {
-                for (int i=0; i<=level; i++) 
-                    out+= " ";
                 
-                out+= t.getDesc() + "\n";
-                out+= t.toString(level++);
+                out += t.toString(level+1);
             }
-        }
+        } 
         return out;
     }
 }
