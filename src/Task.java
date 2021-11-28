@@ -1,6 +1,5 @@
 import java.util.ArrayList;
 
-//TODO: Fix the tosString
 public class Task {
     private String desc;
 
@@ -29,19 +28,20 @@ public class Task {
 
 
     public String toString () {
-        return toString(0);    }
-
-    public String toString (int level) {
+        return toString(1);
+    }
+    public String toString (int level ) {
         String out = "";
-        for (int i = 0; i < level; i++) {
-            out += "\t";
-        }
         out += desc + "\n";
 
         if (subTasks.size() != 0) {
+            int i = 1;
             for (Task t : subTasks) {
-                
-                out += t.toString(level+1);
+                for (int j = 0; j < level; j++) {
+                    out += "\t";
+                }
+                out += i + ". " + t.toString(level+1);
+                i++;
             }
         } 
         return out;
