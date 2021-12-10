@@ -3,14 +3,24 @@ import java.util.ArrayList;
 public class Task {
     private String desc;
 
+    //pointer to the parent Task
+    private Task parentTask;
+
     
     //recursive classes? I'm in!
     private ArrayList<Task> subTasks = new ArrayList<>();
     
 
     public Task (String desc) {
+        this.parentTask = null;
         this.desc = desc;
     }
+    public Task (String desc, Task parentTask) {
+        this.desc = desc;
+        this.parentTask = parentTask;
+    }
+    //how the f what the heck am i doing lmao
+    
     public void addSubTask (Task subTask) {
         subTasks.add(subTask);
     }
