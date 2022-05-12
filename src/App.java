@@ -7,6 +7,7 @@ public class App {
     static Task ToDoList = null;
     static Task current = null;
     public static void main(String[] args) throws Exception {
+
         try {
             FileInputStream fileIn = new FileInputStream("TodoList.tsk");
             ObjectInputStream in = new ObjectInputStream(fileIn);

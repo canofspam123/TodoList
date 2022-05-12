@@ -10,6 +10,9 @@ public class Task implements Serializable{
     //pointer to the parent Task
     private Task parentTask;
 
+    //pointer to the parent Task
+    public Task parentTask;
+
     
     //Stores the pointers to all subtasks of this task
     private ArrayList<Task> subTasks = new ArrayList<>();
@@ -20,6 +23,12 @@ public class Task implements Serializable{
         this.parentTask = null;
         this.desc = desc;
     }
+    private Task (String desc, Task parentTask) {
+
+        this.desc = desc;
+        this.parentTask = parentTask;
+    }
+
 
     // This constructor creates a Task object with a pointer to a parent
     // is private because it is only used as a helper method for addSubTask
