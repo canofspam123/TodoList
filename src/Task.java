@@ -10,8 +10,6 @@ public class Task implements Serializable{
     //pointer to the parent Task
     private Task parentTask;
 
-    //pointer to the parent Task
-    public Task parentTask;
 
     
     //Stores the pointers to all subtasks of this task
@@ -22,11 +20,6 @@ public class Task implements Serializable{
     public Task (String desc) {
         this.parentTask = null;
         this.desc = desc;
-    }
-    private Task (String desc, Task parentTask) {
-
-        this.desc = desc;
-        this.parentTask = parentTask;
     }
 
 
