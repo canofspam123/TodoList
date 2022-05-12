@@ -1,18 +1,36 @@
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Task {
+public class Task implements Serializable{
+
+
     private String desc;
+    
+
+    //pointer to the parent Task
+    private Task parentTask;
 
     
-    //recursive classes? I'm in!
+    //Stores the pointers to all subtasks of this task
     private ArrayList<Task> subTasks = new ArrayList<>();
     
-
+    //This constructor creates a Task object with no parent,
+    //and is public because a parent task can be created anywhere
     public Task (String desc) {
+        this.parentTask = null;
         this.desc = desc;
     }
-    public void addSubTask (Task subTask) {
-        subTasks.add(subTask);
+
+    // This constructor creates a Task object with a pointer to a parent
+    // is private because it is only used as a helper method for addSubTask
+    private Task (String desc, Task parentTask) {
+        this.desc = desc;
+        this.parentTask = parentTask;
+    }
+    
+    
+    public void addSubTask (String desc) {
+        subTasks.add(new Task(desc, this));
     }
     public void removeSubTask (int index) {
         subTasks.remove(index);
@@ -21,12 +39,18 @@ public class Task {
     public String getDesc() {
         return this.desc;
     }
+    public Task getParent(){
+        return this.parentTask;
+    }
     public ArrayList<Task> getSubTasks() {
         return this.subTasks;
     }
+    public Task getSubTask(int n){
+        return subTasks.get(n);
+    }
 
 
-
+    // Overloaded in this manner because it allows for a default call
     public String toString () {
         return toString(1);
     }
@@ -35,10 +59,10 @@ public class Task {
         out += desc + "\n";
 
         if (subTasks.size() != 0) {
-            int i = 1;
+            int i = 0;
             for (Task t : subTasks) {
                 for (int j = 0; j < level; j++) {
-                    out += "\t";
+                    out += "|" +  "\t";
                 }
                 out += i + ". " + t.toString(level+1);
                 i++;
@@ -46,4 +70,4 @@ public class Task {
         } 
         return out;
     }
-}
+} //what even 
