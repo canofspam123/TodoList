@@ -17,7 +17,7 @@ public class App {
             current = ToDoList;
         } catch (IOException i){
             System.out.println("No existing list, creating new list.");
-            ToDoList = new Task("My Tasks");
+            ToDoList = new Task("My Tasks", "All your tasks");
             current = ToDoList;
         } catch (ClassNotFoundException c){
             c.printStackTrace();
@@ -40,9 +40,15 @@ public class App {
 
         String command = input;
         String param = "";
+        String param1 = "";
         if (input.indexOf(" ")!=-1) {
             command = input.substring(0, input.indexOf(" "));
-            param   = input.substring(input.indexOf(" ")+1);
+            try {
+                param   = input.substring(input.indexOf(" ")+1).split(" ## ")[0];
+                param1   = input.substring(input.indexOf(" ")+1).split(" ## ")[1];
+            } catch (ArrayIndexOutOfBoundsException e) {
+                param   = input.substring(input.indexOf(" ")+1);
+            }
         }
 
         switch(command) {
@@ -74,7 +80,7 @@ public class App {
 
             case "nav": {
                 try{
-                    current = current.getSubTask(Integer.parseInt(param));
+                    current = current.getSubTask(Integer.parseInt(param)-1);
                 } catch (Exception e) {
                     System.out.println("Please enter a valid integer value after the nav command.");
                 }
@@ -94,7 +100,7 @@ public class App {
 
             case "add" : {
                 try {
-                    current.addSubTask(param);
+                    current.addSubTask(param, param1);
                 } catch (Exception e) {
                     System.out.println("Please enter a valid name value after the add command.");
 

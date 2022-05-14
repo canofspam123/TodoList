@@ -4,6 +4,7 @@ import java.util.ArrayList;
 public class Task implements Serializable{
 
 
+    private String name;
     private String desc;
     
 
@@ -17,29 +18,31 @@ public class Task implements Serializable{
     
     //This constructor creates a Task object with no parent,
     //and is public because a parent task can be created anywhere
-    public Task (String desc) {
+    public Task (String name, String desc) {
         this.parentTask = null;
+        this.name = name;
         this.desc = desc;
     }
 
 
     // This constructor creates a Task object with a pointer to a parent
     // is private because it is only used as a helper method for addSubTask
-    private Task (String desc, Task parentTask) {
+    private Task (String name, String desc, Task parentTask) {
+        this.name = name;
         this.desc = desc;
         this.parentTask = parentTask;
     }
     
     
-    public void addSubTask (String desc) {
-        subTasks.add(new Task(desc, this));
+    public void addSubTask (String name, String desc) {
+        subTasks.add(new Task(name, desc, this));
     }
     public void removeSubTask (int index) {
         subTasks.remove(index);
     }
 
-    public String getDesc() {
-        return this.desc;
+    public String getname() {
+        return this.name;
     }
     public Task getParent(){
         return this.parentTask;
@@ -58,10 +61,11 @@ public class Task implements Serializable{
     }
     public String toString (int level ) {
         String out = "";
-        out += desc + "\n";
-
+        out += name;
+        if (level==1) out += " - " + desc;
+        out += "\n";
         if (subTasks.size() != 0) {
-            int i = 0;
+            int i = 1;
             for (Task t : subTasks) {
                 for (int j = 0; j < level; j++) {
                     out += "|" +  "\t";
