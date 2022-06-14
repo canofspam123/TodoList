@@ -1,12 +1,14 @@
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.ThreadPoolExecutor;
 
 public class App {
     //Figure out how to do the UI
     //Commands: nav, rem, add, back, home
-    static Task ToDoList = null;
-    static Task current = null;
-    public static void main(String[] args) throws Exception {
+    static Task ToDoList = new Task("My Tasks","All your tasks");
+    static Task currentTask = ToDoList;
+
+    public static void main(String[] args) {
 
         try {
             FileInputStream fileIn = new FileInputStream("TodoList.tsk");
@@ -14,44 +16,40 @@ public class App {
             ToDoList = (Task) in.readObject();
             in.close();
             fileIn.close();
-            current = ToDoList;
+            currentTask = ToDoList;
         } catch (IOException i){
             System.out.println("No existing list, creating new list.");
             ToDoList = new Task("My Tasks", "All your tasks");
-            current = ToDoList;
+            currentTask = ToDoList;
         } catch (ClassNotFoundException c){
             c.printStackTrace();
         }
         Scanner s = new Scanner(System.in);
         String in = "";
         while (!in.equals("end")) {
-            
+
             System.out.println("\n~~~~~~~~");
-            System.out.println(current);
+            System.out.println(currentTask);
             in = s.nextLine();
             commander(in);
-            
+
         }
-        s.close();
-        
+
+
     }
 
     static void commander (String input) {
-
-        String command = input;
-        String param = "";
-        String param1 = "";
-        if (input.indexOf(" ")!=-1) {
-            command = input.substring(0, input.indexOf(" "));
-            try {
-                param   = input.substring(input.indexOf(" ")+1).split(" ## ")[0];
-                param1   = input.substring(input.indexOf(" ")+1).split(" ## ")[1];
-            } catch (ArrayIndexOutOfBoundsException e) {
-                param   = input.substring(input.indexOf(" ")+1);
-            }
-        }
-
-        switch(command) {
+        Scanner s = new Scanner(System.in);
+        /*
+        TODO:
+         home
+         back
+         nav
+         add
+         rem
+         edit
+         */
+        switch (input) {
             case "end" : {
                 try {
                     FileOutputStream fileOut = new FileOutputStream("TodoList.tsk");
@@ -65,53 +63,59 @@ public class App {
                 }
                 break;
             }
-            
-            case "back" : {
-                if(current.getParent()!=null){
-                    current = current.getParent();
+
+            case "home" : currentTask =ToDoList;
+                break;
+
+            case "back" :
+                if(currentTask!=ToDoList){
+                    currentTask=ToDoList;
                 }
                 break;
-            }
 
-            case "home" : {
-                current = ToDoList;
-                break;
-            }
-
-            case "nav": {
+            case "nav" :
+                System.out.println("Enter an int between 0 and " + (currentTask.getSubTasks().size()-1));
                 try{
-                    current = current.getSubTask(Integer.parseInt(param)-1);
-                } catch (Exception e) {
-                    System.out.println("Please enter a valid integer value after the nav command.");
+                    currentTask=currentTask.getSubTasks().get(s.nextInt());
+                } catch (Exception e){
+                    System.out.println("Invalid input");
                 }
                 break;
 
-            }
+            case "add" :
+                System.out.println("name:");
+                String name = s.nextLine();
+                System.out.println("desc:");
+                String desc = s.nextLine();
 
-            case "rem" : {
-                try {
-                    current.removeSubTask(Integer.parseInt(param));
-                } catch (Exception e) {
-                    System.out.println("Please enter a valid integer value after the rem command.");
+                currentTask.addSubTask(name, desc);
+                break;
+
+            case "rem" :
+                System.out.println("Enter an int between 0 and " + (currentTask.getSubTasks().size()-1));
+                try{
+                    currentTask.removeSubTask(s.nextInt());
+                } catch (Exception e){
+                    System.out.println("Invalid input");
                 }
                 break;
 
-            }
+            case "edit" :
+                try{
+                    System.out.println("Enter an int between 0 and " + (currentTask.getSubTasks().size()-1));
+                    int n = s.nextInt();
+                    System.out.println("new name:");
+                    String newName = s.nextLine();
+                    System.out.println("new desc:");
+                    String newDesc = s.nextLine();
 
-            case "add" : {
-                try {
-                    current.addSubTask(param, param1);
-                } catch (Exception e) {
-                    System.out.println("Please enter a valid name value after the add command.");
+                    currentTask.getSubTasks().get(n).setName(newName);
+                    currentTask.getSubTasks().get(n).setName(newDesc);
 
+                } catch (Exception e){
+                    System.out.println("Invalid input");
                 }
-                break;
 
-            }
-
-            default : {
-                System.out.println("Please enter a valid command, then parameter.");
-            }
         }
     }
 }

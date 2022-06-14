@@ -1,4 +1,5 @@
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Task implements Serializable{
@@ -6,16 +7,16 @@ public class Task implements Serializable{
 
     private String name;
     private String desc;
-    
+
 
     //pointer to the parent Task
-    private Task parentTask;
+    private final Task parentTask;
 
 
-    
+
     //Stores the pointers to all subtasks of this task
     private ArrayList<Task> subTasks = new ArrayList<>();
-    
+
     //This constructor creates a Task object with no parent,
     //and is public because a parent task can be created anywhere
     public Task (String name, String desc) {
@@ -32,26 +33,36 @@ public class Task implements Serializable{
         this.desc = desc;
         this.parentTask = parentTask;
     }
-    
-    
+
+
     public void addSubTask (String name, String desc) {
         subTasks.add(new Task(name, desc, this));
     }
     public void removeSubTask (int index) {
         subTasks.remove(index);
     }
-
-    public String getname() {
-        return this.name;
-    }
-    public Task getParent(){
-        return this.parentTask;
-    }
-    public ArrayList<Task> getSubTasks() {
+    public ArrayList<Task> getSubTasks(){
         return this.subTasks;
     }
-    public Task getSubTask(int n){
-        return subTasks.get(n);
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDesc() {
+        return desc;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
+    }
+
+    public Task getParentTask() {
+        return parentTask;
     }
 
 
@@ -65,7 +76,7 @@ public class Task implements Serializable{
         if (level==1) out += " - " + desc;
         out += "\n";
         if (subTasks.size() != 0) {
-            int i = 1;
+            int i = 0;
             for (Task t : subTasks) {
                 for (int j = 0; j < level; j++) {
                     out += "|" +  "\t";
@@ -73,7 +84,7 @@ public class Task implements Serializable{
                 out += i + ". " + t.toString(level+1);
                 i++;
             }
-        } 
+        }
         return out;
     }
-} //what even 
+} //what even
